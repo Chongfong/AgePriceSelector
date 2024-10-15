@@ -1,17 +1,27 @@
 import React, { useState } from 'react';
 import { TextField, Typography, Box } from '@mui/material';
+import addComma from '../../utils/addComma';
 
 function PriceInput() {
   const [cost, setCost] = useState('0');
   const [warning, setWarning] = useState(false);
 
   const handleCostChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value === '') {
+    const inputValue = event.target.value;
+    if (inputValue === '') {
       setWarning(true);
     } else {
       setWarning(false);
     }
-    setCost(event.target.value);
+    if (
+      inputValue === '-' ||
+      inputValue === '' ||
+      (inputValue.slice(-1) === '.' && inputValue.split('.').length <= 2)
+    ) {
+      setCost(event.target.value);
+    } else {
+      setCost(addComma(event.target.value.replaceAll(',', '')));
+    }
   };
 
   return (

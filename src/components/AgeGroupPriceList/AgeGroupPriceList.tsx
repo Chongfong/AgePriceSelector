@@ -2,7 +2,7 @@ import { Box, Button, Divider, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import AgeGroupSelect from '../AgeGroupSelect';
 import PriceInput from '../PriceInput';
-import getNumberIntervals from '../../utils/getNumberIntervals';
+import { validateGroups, allAgesCovered } from '../../utils/ageGroupPriceUtils';
 
 interface AgeGroupPriceListProps {
   onChange: (result: { ageGroup: number[]; price: string }[]) => void;
@@ -12,34 +12,12 @@ function AgeGroupPriceList({ onChange }: AgeGroupPriceListProps) {
   const [ageGroups, setAgeGroups] = useState([{ ageGroup: [0, 20], price: '0' }]);
   const [error, setError] = useState<string | null | boolean[]>(null);
 
-  const validateGroups = (groups: { ageGroup: number[]; price: string }[]) => {
-    const intervals = groups.map((group) => group.ageGroup);
-    const { overlap } = getNumberIntervals(intervals);
-
-    const overlapGroups = groups.map((group) =>
-      overlap.some(
-        (range) =>
-          (group.ageGroup[0] >= range[0] && group.ageGroup[0] <= range[1]) ||
-          (group.ageGroup[1] >= range[0] && group.ageGroup[1] <= range[1]) ||
-          (group.ageGroup[0] <= range[0] && group.ageGroup[1] >= range[1]),
-      ),
-    );
-
-    const hasEmptyPrice = groups.some((group) => group.price === '');
-
-    if (overlapGroups) {
-      setError(overlapGroups);
-    } else if (hasEmptyPrice) {
-      setError('hasEmptyPrice');
-    } else {
-      setError(null);
-    }
-  };
   const handleGroupChange = (index: number, newAgeGroup: number[]) => {
     const updatedGroups = [...ageGroups];
     updatedGroups[index].ageGroup = newAgeGroup;
     setAgeGroups(updatedGroups);
-    validateGroups(updatedGroups);
+    const validationResult = validateGroups(updatedGroups);
+    setError(validationResult);
     onChange(ageGroups);
   };
 
@@ -50,20 +28,16 @@ function AgeGroupPriceList({ onChange }: AgeGroupPriceListProps) {
     onChange(ageGroups);
   };
 
-  const allAgesCovered = () => {
-    const intervals = ageGroups.map((group) => group.ageGroup);
-    const { notInclude } = getNumberIntervals(intervals);
-    return notInclude.length === 0;
-  };
-
   const addAgeGroup = () => {
     setAgeGroups([...ageGroups, { ageGroup: [20, 20], price: '0' }]);
-    validateGroups([...ageGroups, { ageGroup: [20, 20], price: '0' }]);
+    const validationResult = validateGroups([...ageGroups, { ageGroup: [20, 20], price: '0' }]);
+    setError(validationResult);
   };
 
   const deleteAgeGroup = (index: number) => {
     setAgeGroups(ageGroups.filter((_, i) => i !== index));
-    validateGroups(ageGroups.filter((_, i) => i !== index));
+    const validationResult = validateGroups(ageGroups.filter((_, i) => i !== index));
+    setError(validationResult);
   };
 
   return (
@@ -108,7 +82,7 @@ function AgeGroupPriceList({ onChange }: AgeGroupPriceListProps) {
       <Button
         sx={{ color: '#00AEA4', width: 'fit-content' }}
         onClick={addAgeGroup}
-        disabled={allAgesCovered()}
+        disabled={allAgesCovered(ageGroups)}
       >
         ＋新增價格設定
       </Button>

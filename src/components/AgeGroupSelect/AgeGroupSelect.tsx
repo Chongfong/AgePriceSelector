@@ -1,18 +1,26 @@
 import React, { useState } from 'react';
 import { Box, Select, Typography, MenuItem, SelectChangeEvent } from '@mui/material';
 
-function AgeGroupSelect() {
-  const [minValue, setMinValue] = useState<number>(0);
-  const [maxValue, setMaxValue] = useState<number>(6);
-  const [warningMin] = useState(true);
-  const [warningMax] = useState(false);
+interface AgeGroupSelectProps {
+  minValue: number;
+  maxValue: number;
+  onChange: (result: number[]) => void;
+  error: string | null;
+}
 
+function AgeGroupSelect({ minValue, maxValue, onChange, error }: AgeGroupSelectProps) {
+  const [minAge, setMinAge] = useState<number>(minValue);
+  const [maxAge, setMaxAge] = useState<number>(maxValue);
   const handleMinChange = (event: SelectChangeEvent<number>) => {
-    setMinValue(event.target.value as number);
+    const newMinValue = event.target.value;
+    setMinAge(parseFloat(newMinValue.toString()));
+    onChange([parseFloat(newMinValue.toString()), maxAge]);
   };
 
   const handleMaxChange = (event: SelectChangeEvent<number>) => {
-    setMaxValue(event.target.value as number);
+    const newMaxValue = event.target.value;
+    setMaxAge(parseFloat(newMaxValue.toString()));
+    onChange([minAge, parseFloat(newMaxValue.toString())]);
   };
 
   const generateOptions = (start: number, end: number) =>
@@ -25,13 +33,12 @@ function AgeGroupSelect() {
       </Typography>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Select
-          value={minValue}
+          value={minAge}
           onChange={handleMinChange}
-          error={warningMin}
           size='small'
-          sx={{ borderRadius: '4px 0  0 4px', marginRight: '-1px' }}
+          sx={{ borderRadius: '4px 0 0 4px', marginRight: '-1px', width: 100 }}
         >
-          {generateOptions(0, maxValue).map((value) => (
+          {generateOptions(0, maxAge).map((value) => (
             <MenuItem key={value} value={value}>
               {value}
             </MenuItem>
@@ -51,20 +58,19 @@ function AgeGroupSelect() {
           ~
         </Typography>
         <Select
-          value={maxValue}
+          value={maxAge}
           onChange={handleMaxChange}
           size='small'
-          sx={{ borderRadius: '0 4px 4px 0', marginLeft: '-1px' }}
-          error={warningMax}
+          sx={{ borderRadius: '0 4px 4px 0', marginLeft: '-1px', width: 100 }}
         >
-          {generateOptions(minValue, 20).map((value) => (
+          {generateOptions(minAge, 20).map((value) => (
             <MenuItem key={value} value={value}>
               {value}
             </MenuItem>
           ))}
         </Select>
       </Box>
-      {(warningMin || warningMax) && (
+      {error === 'hasOverlap' && (
         <Box
           sx={{
             bgcolor: '#F6EBE8',

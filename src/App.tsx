@@ -1,12 +1,12 @@
 import React from 'react';
 import './App.css';
-import PriceInput from './components/PriceInput';
+import AgeGroupPriceList from './components/AgeGroupPriceList';
 
 function App() {
   return (
     <div className='App'>
       <header className='App-header'>
-        <PriceInput />
+        <AgeGroupPriceList onChange={(result: {}[]): void => console.log(result)} />
       </header>
     </div>
   );

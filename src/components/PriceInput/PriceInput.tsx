@@ -2,14 +2,19 @@ import React, { useState } from 'react';
 import { TextField, Typography, Box } from '@mui/material';
 import addComma from '../../utils/addComma';
 
-function PriceInput() {
-  const [cost, setCost] = useState('0');
+interface PriceInputProps {
+  cost: string;
+  onChange: (price: string) => void;
+}
+function PriceInput({ cost, onChange }: PriceInputProps) {
+  const [price, setPrice] = useState(cost);
   const [warning, setWarning] = useState(false);
 
-  const handleCostChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
     if (inputValue === '') {
       setWarning(true);
+      onChange('');
     } else {
       setWarning(false);
     }
@@ -18,9 +23,12 @@ function PriceInput() {
       inputValue === '' ||
       (inputValue.slice(-1) === '.' && inputValue.split('.').length <= 2)
     ) {
-      setCost(event.target.value);
+      setPrice(event.target.value);
+      onChange(event.target.value);
     } else {
-      setCost(addComma(event.target.value.replaceAll(',', '')));
+      const formattedPrice = addComma(inputValue.replaceAll(',', ''));
+      setPrice(formattedPrice);
+      onChange(formattedPrice);
     }
   };
 
@@ -50,8 +58,8 @@ function PriceInput() {
           fullWidth
           variant='outlined'
           placeholder='請輸入費用'
-          value={cost}
-          onChange={handleCostChange}
+          value={price}
+          onChange={handlePriceChange}
           size='small'
           sx={{ marginLeft: '8px' }}
           slotProps={{ input: { sx: { borderRadius: '0 4px 4px 0' } } }}

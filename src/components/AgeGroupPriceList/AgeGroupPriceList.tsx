@@ -10,7 +10,7 @@ interface AgeGroupPriceListProps {
 
 function AgeGroupPriceList({ onChange }: AgeGroupPriceListProps) {
   const [ageGroups, setAgeGroups] = useState([{ ageGroup: [0, 20], price: '0' }]);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null | boolean[]>(null);
   const addAgeGroup = () => {
     setAgeGroups([...ageGroups, { ageGroup: [0, 20], price: '0' }]);
   };
@@ -20,13 +20,18 @@ function AgeGroupPriceList({ onChange }: AgeGroupPriceListProps) {
     const { overlap } = getNumberIntervals(intervals);
 
     const overlapGroups = groups.map((group) =>
-      overlap.some((range) => group.ageGroup[0] >= range[0] && group.ageGroup[1] <= range[1]),
+      overlap.some(
+        (range) =>
+          (group.ageGroup[0] >= range[0] && group.ageGroup[0] <= range[1]) ||
+          (group.ageGroup[1] >= range[0] && group.ageGroup[1] <= range[1]) ||
+          (group.ageGroup[0] <= range[0] && group.ageGroup[1] >= range[1]),
+      ),
     );
 
     const hasEmptyPrice = groups.some((group) => group.price === '');
 
     if (overlapGroups) {
-      setError('hasOverlap');
+      setError(overlapGroups);
     } else if (hasEmptyPrice) {
       setError('hasEmptyPrice');
     } else {
@@ -74,7 +79,7 @@ function AgeGroupPriceList({ onChange }: AgeGroupPriceListProps) {
               minValue={group.ageGroup[0]}
               maxValue={group.ageGroup[1]}
               onChange={(newAgeGroup) => handleGroupChange(index, newAgeGroup)}
-              error={error}
+              error={error && error[index] ? 'hasOverlap' : null}
             />
             <PriceInput
               cost={group.price}

@@ -1,11 +1,11 @@
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Divider, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import AgeGroupSelect from '../AgeGroupSelect';
 import PriceInput from '../PriceInput';
 import getNumberIntervals from '../../utils/getNumberIntervals';
 
 interface AgeGroupPriceListProps {
-  onChange: (result: {}[]) => void;
+  onChange: (result: { ageGroup: number[]; price: string }[]) => void;
 }
 
 function AgeGroupPriceList({ onChange }: AgeGroupPriceListProps) {
@@ -63,17 +63,29 @@ function AgeGroupPriceList({ onChange }: AgeGroupPriceListProps) {
 
   const deleteAgeGroup = (index: number) => {
     setAgeGroups(ageGroups.filter((_, i) => i !== index));
+    validateGroups(ageGroups.filter((_, i) => i !== index));
   };
 
   return (
-    <>
+    <Box display='flex' justifyContent='flex-start' flexDirection='column'>
       {ageGroups.map((group, index) => (
-        <Box textAlign='left' display='flex' gap='16px' flexDirection='column'>
+        <Box
+          key={group.ageGroup.toString()}
+          textAlign='left'
+          display='flex'
+          gap='16px'
+          flexDirection='column'
+          padding={1}
+        >
           <Box display='flex' justifyContent='space-between' alignItems='center'>
-            <Typography variant='body2' color='text.primary'>
+            <Typography variant='body1' color='text.primary'>
               價格設定 - {index + 1}
             </Typography>
-            <Button onClick={() => deleteAgeGroup(index)} color='error'>
+            <Button
+              onClick={() => deleteAgeGroup(index)}
+              color='error'
+              disabled={ageGroups.length === 1}
+            >
               × 移除
             </Button>
           </Box>
@@ -89,10 +101,10 @@ function AgeGroupPriceList({ onChange }: AgeGroupPriceListProps) {
               onChange={(newPrice) => handlePriceChange(index, newPrice)}
             />
           </Box>
+          {index !== ageGroups.length - 1 && <Divider />}
         </Box>
       ))}
       {error && <Typography color='error'>{error}</Typography>}
-
       <Button
         sx={{ color: '#00AEA4', width: 'fit-content' }}
         onClick={addAgeGroup}
@@ -100,7 +112,7 @@ function AgeGroupPriceList({ onChange }: AgeGroupPriceListProps) {
       >
         ＋新增價格設定
       </Button>
-    </>
+    </Box>
   );
 }
 

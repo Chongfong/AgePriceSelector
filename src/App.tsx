@@ -6,7 +6,9 @@ function App() {
   return (
     <div className='App'>
       <header className='App-header'>
-        <AgeGroupPriceList onChange={(result: {}[]): void => console.log(result)} />
+        <AgeGroupPriceList
+          onChange={(result: { ageGroup: number[]; price: string }[]): void => console.log(result)}
+        />
       </header>
     </div>
   );

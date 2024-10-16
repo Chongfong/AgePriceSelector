@@ -61,6 +61,10 @@ function AgeGroupPriceList({ onChange }: AgeGroupPriceListProps) {
     validateGroups([...ageGroups, { ageGroup: [20, 20], price: '0' }]);
   };
 
+  const deleteAgeGroup = (index: number) => {
+    setAgeGroups(ageGroups.filter((_, i) => i !== index));
+  };
+
   return (
     <>
       {ageGroups.map((group, index) => (
@@ -69,10 +73,7 @@ function AgeGroupPriceList({ onChange }: AgeGroupPriceListProps) {
             <Typography variant='body2' color='text.primary'>
               價格設定 - {index + 1}
             </Typography>
-            <Button
-              onClick={() => setAgeGroups(ageGroups.filter((_, i) => i !== index))}
-              color='error'
-            >
+            <Button onClick={() => deleteAgeGroup(index)} color='error'>
               × 移除
             </Button>
           </Box>

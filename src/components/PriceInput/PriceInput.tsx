@@ -1,27 +1,25 @@
 import React, { useState } from 'react';
 import { TextField, Typography, Box } from '@mui/material';
 import addComma from '../../utils/addComma';
+import { validatePrice, formatPrice } from '../../utils/validatePrice';
 
-function PriceInput() {
-  const [cost, setCost] = useState('0');
-  const [warning, setWarning] = useState(false);
+interface PriceInputProps {
+  cost: string;
+  onChange: (price: string) => void;
+}
+function PriceInput({ cost, onChange }: PriceInputProps) {
+  const [price, setPrice] = useState(cost);
+  const [warning, setWarning] = useState('');
 
-  const handleCostChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
-    if (inputValue === '') {
-      setWarning(true);
-    } else {
-      setWarning(false);
-    }
-    if (
-      inputValue === '-' ||
-      inputValue === '' ||
-      (inputValue.slice(-1) === '.' && inputValue.split('.').length <= 2)
-    ) {
-      setCost(event.target.value);
-    } else {
-      setCost(addComma(event.target.value.replaceAll(',', '')));
-    }
+    const warningMessage = validatePrice(inputValue);
+
+    setWarning(warningMessage);
+
+    const formattedPrice = formatPrice(inputValue, addComma);
+    setPrice(formattedPrice);
+    onChange(formattedPrice);
   };
 
   return (
@@ -46,12 +44,12 @@ function PriceInput() {
           <Typography variant='body1'>TWD</Typography>
         </Box>
         <TextField
-          error={warning}
+          error={Boolean(warning)}
           fullWidth
           variant='outlined'
           placeholder='請輸入費用'
-          value={cost}
-          onChange={handleCostChange}
+          value={price}
+          onChange={handlePriceChange}
           size='small'
           sx={{ marginLeft: '8px' }}
           slotProps={{ input: { sx: { borderRadius: '0 4px 4px 0' } } }}
@@ -67,7 +65,7 @@ function PriceInput() {
           }}
         >
           <Typography variant='body2' color='error'>
-            不可以為空白
+            {warning === 'noEmpty' ? '不可以為空白' : '小數點最後一位不能為 0'}
           </Typography>
         </Box>
       )}

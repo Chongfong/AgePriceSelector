@@ -11,9 +11,6 @@ interface AgeGroupPriceListProps {
 function AgeGroupPriceList({ onChange }: AgeGroupPriceListProps) {
   const [ageGroups, setAgeGroups] = useState([{ ageGroup: [0, 20], price: '0' }]);
   const [error, setError] = useState<string | null | boolean[]>(null);
-  const addAgeGroup = () => {
-    setAgeGroups([...ageGroups, { ageGroup: [0, 20], price: '0' }]);
-  };
 
   const validateGroups = (groups: { ageGroup: number[]; price: string }[]) => {
     const intervals = groups.map((group) => group.ageGroup);
@@ -57,6 +54,11 @@ function AgeGroupPriceList({ onChange }: AgeGroupPriceListProps) {
     const intervals = ageGroups.map((group) => group.ageGroup);
     const { notInclude } = getNumberIntervals(intervals);
     return notInclude.length === 0;
+  };
+
+  const addAgeGroup = () => {
+    setAgeGroups([...ageGroups, { ageGroup: [20, 20], price: '0' }]);
+    validateGroups([...ageGroups, { ageGroup: [20, 20], price: '0' }]);
   };
 
   return (

@@ -8,15 +8,17 @@ interface PriceInputProps {
 }
 function PriceInput({ cost, onChange }: PriceInputProps) {
   const [price, setPrice] = useState(cost);
-  const [warning, setWarning] = useState(false);
+  const [warning, setWarning] = useState('');
 
   const handlePriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
     if (inputValue === '') {
-      setWarning(true);
+      setWarning('noEmpty');
       onChange('');
+    } else if (inputValue.split('.')[1]?.slice(-1) === '0') {
+      setWarning('decimalPartEndsWithZero');
     } else {
-      setWarning(false);
+      setWarning('');
     }
     if (!(inputValue.slice(0, 1) === '0' && inputValue.slice(1, 2) === '0')) {
       if (
@@ -56,7 +58,7 @@ function PriceInput({ cost, onChange }: PriceInputProps) {
           <Typography variant='body1'>TWD</Typography>
         </Box>
         <TextField
-          error={warning}
+          error={Boolean(warning)}
           fullWidth
           variant='outlined'
           placeholder='請輸入費用'
@@ -77,7 +79,7 @@ function PriceInput({ cost, onChange }: PriceInputProps) {
           }}
         >
           <Typography variant='body2' color='error'>
-            不可以為空白
+            {warning === 'noEmpty' ? '不可以為空白' : '小數點最後一位不能為 0'}
           </Typography>
         </Box>
       )}

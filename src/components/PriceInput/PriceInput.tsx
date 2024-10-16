@@ -18,17 +18,19 @@ function PriceInput({ cost, onChange }: PriceInputProps) {
     } else {
       setWarning(false);
     }
-    if (
-      inputValue === '-' ||
-      inputValue === '' ||
-      (inputValue.slice(-1) === '.' && inputValue.split('.').length <= 2)
-    ) {
-      setPrice(event.target.value);
-      onChange(event.target.value);
-    } else {
-      const formattedPrice = addComma(inputValue.replaceAll(',', ''));
-      setPrice(formattedPrice);
-      onChange(formattedPrice);
+    if (!(inputValue.slice(0, 1) === '0' && inputValue.slice(1, 2) === '0')) {
+      if (
+        inputValue === '-' ||
+        inputValue === '' ||
+        (inputValue.slice(-1) === '.' && inputValue.split('.').length <= 2)
+      ) {
+        setPrice(event.target.value);
+        onChange(event.target.value);
+      } else {
+        const formattedPrice = addComma(inputValue.replaceAll(',', ''));
+        setPrice(formattedPrice);
+        onChange(formattedPrice);
+      }
     }
   };
 

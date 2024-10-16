@@ -1,46 +1,68 @@
-# Getting Started with Create React App
+<h1 align="center"> Age Price Selector </h1> <br>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<p align="center">
+  <a href="https://age-price-selector.vercel.app/">
+    <img alt="age-price-selector" title="age-price-selector" src="public/logo512.png" width="100">
+  </a>
+</p>
 
-## Available Scripts
+<p align="center">
+  Easily choose your room price based on different age sections.
+</p>
 
-In the project directory, you can run:
+<https://age-price-selector.vercel.app/>
 
-### `yarn start`
+## ▌ Introduction
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+choose your room price based on different age sections.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## ▌ Techniques
 
-### `yarn test`
+- Front-End Fundamental
+  - HTML / CSS / JavaScript
+  - TypeScript
+- Frameworks & Library
+  - React (Hooks)
+  - MUI
+- Others
+  - Lint Tool: ESLint (Airbnb Style Guide) / Prettier
+  - Version Control: Git / GitHub
+  - Hoisting: Vercel
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `yarn build`
+## ▌ Features
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Age Selector
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. The age range is between 0 and 20.
+2. Disable unselectable ages.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Price Input
 
-### `yarn eject`
+1. Automatically add commas to the numbers.
+2. Negative and decimal numbers are allowed.
+3. Input can be 0 but not empty.
+4. Decimals ending in .00 are not allowed.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Age Price Selector
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. When all age sections are included, the “Add Age” button is disabled.
+2. The delete button is disabled when there is only one AgePriceList.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+---
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## ▌ Quick Start
 
-## Learn More
+1. Copy the content of root folder to your project folder.
+2. Run the cmd: `npm install` or `npm i`.
+3. Run the cmd: `npm run start`.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
+
+## ▌ Contact
+
+[Charlie WU](https://github.com/Chongfong)
+
+Email: wl0079665@gmail.com

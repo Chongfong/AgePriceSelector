@@ -33,6 +33,7 @@ function AgeGroupSelect({ minValue, maxValue, onChange, error }: AgeGroupSelectP
       </Typography>
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Select
+          error={error === 'hasOverlap'}
           value={minAge}
           onChange={handleMinChange}
           size='small'
@@ -58,6 +59,7 @@ function AgeGroupSelect({ minValue, maxValue, onChange, error }: AgeGroupSelectP
           ~
         </Typography>
         <Select
+          error={error === 'hasOverlap'}
           value={maxAge}
           onChange={handleMaxChange}
           size='small'
